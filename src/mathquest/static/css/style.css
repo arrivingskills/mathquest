@@ -1,0 +1,735 @@
+/* ============================================================
+   MathQuest – Rainbow-themed CSS for kids aged 7–12
+   ============================================================ */
+
+/* Google Fonts import (kid-friendly) */
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Baloo+2:wght@400;600;800&family=Bubblegum+Sans&display=swap');
+
+/* ---------- CSS Custom Properties ---------- */
+:root {
+  --red:    #FF4444;
+  --orange: #FF8C00;
+  --yellow: #FFD700;
+  --green:  #32CD32;
+  --blue:   #1E90FF;
+  --indigo: #6A5ACD;
+  --violet: #EE82EE;
+
+  --bg-gradient: linear-gradient(135deg,
+    var(--red) 0%, var(--orange) 14%, var(--yellow) 28%,
+    var(--green) 42%, var(--blue) 57%, var(--indigo) 71%,
+    var(--violet) 85%, var(--red) 100%);
+
+  --card-bg: rgba(255,255,255,0.92);
+  --card-shadow: 0 8px 32px rgba(0,0,0,0.18);
+  --radius: 20px;
+  --font-title: 'Fredoka One', cursive;
+  --font-body:  'Baloo 2', cursive;
+  --font-fun:   'Bubblegum Sans', cursive;
+}
+
+/* ---------- Reset & Base ---------- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 18px; }
+
+body {
+  font-family: var(--font-body);
+  min-height: 100vh;
+  background: #ffffff;
+  color: #333;
+  overflow-x: hidden;
+}
+
+@keyframes rainbowShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ---------- Layout ---------- */
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  box-shadow: var(--card-shadow);
+  padding: 2rem 2.5rem;
+  max-width: 600px;
+  width: 100%;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: var(--bg-gradient);
+  background-size: 400% 100%;
+  animation: rainbowShift 6s ease infinite;
+}
+
+/* ---------- Typography ---------- */
+h1, h2, h3 {
+  font-family: var(--font-title);
+  color: #222;
+}
+
+h1 { font-size: 2.4rem; margin-bottom: 0.5rem; }
+h2 { font-size: 1.8rem; margin-bottom: 0.5rem; }
+h3 { font-size: 1.3rem; margin-bottom: 0.3rem; }
+
+h2.rainbow, h3.rainbow {
+  background: var(--bg-gradient);
+  background-size: 400% 400%;
+  animation: rainbowShift 6s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  font-family: var(--font-fun);
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 1.5rem;
+}
+
+/* ---------- Buttons ---------- */
+.btn {
+  display: inline-block;
+  padding: 0.7rem 1.8rem;
+  border: none;
+  border-radius: 50px;
+  font-family: var(--font-title);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  text-decoration: none;
+  color: #fff;
+}
+.btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.25);
+}
+.btn:active { transform: translateY(0); }
+
+.btn-red    { background: var(--red); }
+.btn-orange { background: var(--orange); }
+.btn-yellow { background: var(--yellow); color: #333; }
+.btn-green  { background: var(--green); }
+.btn-blue   { background: var(--blue); }
+.btn-indigo { background: var(--indigo); }
+.btn-violet { background: var(--violet); }
+
+.btn-rainbow {
+  background: var(--bg-gradient);
+  background-size: 300% 300%;
+  animation: rainbowShift 4s ease infinite;
+}
+
+.btn-lg { padding: 1rem 2.5rem; font-size: 1.3rem; }
+
+/* ---------- Form Inputs ---------- */
+input[type="text"],
+input[type="number"] {
+  font-family: var(--font-body);
+  font-size: 1.2rem;
+  padding: 0.7rem 1.2rem;
+  border: 3px solid var(--blue);
+  border-radius: 15px;
+  outline: none;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  transition: border-color 0.3s;
+}
+input:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 4px rgba(238,130,238,0.25);
+}
+
+/* ---------- Avatar selector ---------- */
+.avatar-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+.avatar-option {
+  font-size: 2.2rem;
+  padding: 0.4rem;
+  border: 3px solid transparent;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.2s;
+  background: rgba(255,255,255,0.5);
+}
+.avatar-option:hover { transform: scale(1.2); }
+.avatar-option.selected {
+  border-color: var(--blue);
+  background: rgba(30,144,255,0.15);
+  transform: scale(1.15);
+}
+
+/* ---------- Dashboard ---------- */
+.stats-row {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.stat-box {
+  background: linear-gradient(135deg, var(--blue), var(--indigo));
+  color: #fff;
+  border-radius: 15px;
+  padding: 0.8rem 1.2rem;
+  min-width: 100px;
+  text-align: center;
+}
+.stat-box .stat-value {
+  font-family: var(--font-title);
+  font-size: 1.8rem;
+}
+.stat-box .stat-label {
+  font-size: 0.75rem;
+  opacity: 0.85;
+}
+
+.difficulty-buttons {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  margin: 1.2rem 0;
+  flex-wrap: wrap;
+}
+
+/* ---------- Leaderboard ---------- */
+.leaderboard-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 0.5rem;
+  margin-top: 1rem;
+}
+.leaderboard-table th {
+  font-family: var(--font-title);
+  font-size: 0.85rem;
+  color: #888;
+  padding: 0.3rem 0.5rem;
+}
+.leaderboard-table td {
+  padding: 0.6rem 0.5rem;
+  background: rgba(255,255,255,0.7);
+  font-weight: 600;
+}
+.leaderboard-table tr td:first-child { border-radius: 12px 0 0 12px; }
+.leaderboard-table tr td:last-child  { border-radius: 0 12px 12px 0; }
+
+.rank-1 td { background: linear-gradient(90deg, #FFD70044, #FFD70011); }
+.rank-2 td { background: linear-gradient(90deg, #C0C0C044, #C0C0C011); }
+.rank-3 td { background: linear-gradient(90deg, #CD7F3244, #CD7F3211); }
+
+.medal { font-size: 1.4rem; }
+
+/* ---------- Game area ---------- */
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.game-score {
+  font-family: var(--font-title);
+  font-size: 1.3rem;
+  color: var(--green);
+}
+.game-wrong {
+  font-family: var(--font-title);
+  font-size: 1rem;
+  color: var(--red);
+}
+
+.question-area {
+  min-height: 150px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 1rem 0;
+}
+.question-text {
+  font-family: var(--font-fun);
+  font-size: 1.4rem;
+  color: #333;
+  margin-bottom: 0.8rem;
+  line-height: 1.4;
+}
+
+/* Visual question groups */
+.visual-group {
+  font-size: 1.6rem;
+  line-height: 1.8;
+  letter-spacing: 4px;
+  margin: 0.3rem 0;
+  word-break: break-all;
+}
+.visual-op {
+  font-family: var(--font-title);
+  font-size: 2rem;
+  color: var(--indigo);
+  margin: 0.2rem 0;
+}
+.visual-crossed {
+  opacity: 0.45;
+  text-decoration: line-through;
+  text-decoration-color: var(--red);
+  text-decoration-thickness: 3px;
+}
+
+.answer-row {
+  display: flex;
+  gap: 0.8rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 1rem;
+  flex-wrap: wrap;
+}
+
+.answer-input {
+  max-width: 160px !important;
+  font-size: 1.5rem !important;
+  font-family: var(--font-title) !important;
+}
+
+.feedback {
+  min-height: 2.5rem;
+  font-family: var(--font-fun);
+  font-size: 1.2rem;
+  margin-top: 0.8rem;
+  transition: all 0.3s;
+}
+.feedback.correct { color: var(--green); }
+.feedback.wrong   { color: var(--red); }
+
+/* ---------- Dunk Tank Scene ---------- */
+.dunk-scene {
+  position: relative;
+  width: 100%;
+  max-width: 500px;
+  height: 300px;
+  margin: 1rem auto;
+  overflow: hidden;
+  border-radius: 15px;
+  background: linear-gradient(180deg, #87CEEB 0%, #87CEEB 75%, #1E90FF 75%, #1565C0 100%);
+}
+
+/* Stone tower */
+.dunk-tower {
+  position: absolute;
+  bottom: 0;
+  left: 8%;
+  width: 18%;
+  height: 82%;
+  background: linear-gradient(180deg, #8B8682 0%, #7A7574 40%, #6B6362 100%);
+  border-radius: 4px 4px 0 0;
+  z-index: 2;
+}
+.dunk-tower::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 18px,
+      rgba(0,0,0,0.15) 18px,
+      rgba(0,0,0,0.15) 20px
+    ),
+    repeating-linear-gradient(
+      90deg,
+      transparent,
+      transparent 28px,
+      rgba(0,0,0,0.1) 28px,
+      rgba(0,0,0,0.1) 30px
+    );
+  border-radius: 4px 4px 0 0;
+}
+.dunk-tower::after {
+  content: '';
+  position: absolute;
+  top: -6px;
+  left: -6%;
+  width: 112%;
+  height: 14px;
+  background: #7A7574;
+  border-radius: 3px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Horizontal pole extending from top of tower */
+.dunk-pole {
+  position: absolute;
+  top: 14%;
+  left: 17%;
+  width: 34%;
+  height: 8px;
+  background: linear-gradient(180deg, #666, #444);
+  border-radius: 4px;
+  z-index: 3;
+}
+
+/* Rope hanging from pole to center of character's head */
+.dunk-rope {
+  position: absolute;
+  top: calc(14% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 30px;
+  background: repeating-linear-gradient(
+    180deg,
+    #8B7355 0px,
+    #A0896C 3px,
+    #8B7355 6px
+  );
+  z-index: 3;
+  transition: height 0.6s ease;
+}
+
+/* Chair + person assembly */
+.dunk-assembly {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 4;
+  transition: top 0.6s ease;
+}
+
+.dunk-person {
+  font-size: 2.2rem;
+  line-height: 1;
+}
+
+.dunk-chair {
+  font-size: 1.6rem;
+  line-height: 1;
+  margin-top: -4px;
+}
+
+.dunk-assembly.splashing {
+  animation: dunkSplash 1.2s forwards;
+}
+
+@keyframes dunkSplash {
+  0%   { transform: translateX(-50%) translateY(0); }
+  50%  { transform: translateX(-50%) translateY(40px); }
+  100% { transform: translateX(-50%) translateY(80px); opacity: 0.3; }
+}
+
+/* Splash effect */
+.splash-effect {
+  position: absolute;
+  left: 50%;
+  bottom: 19%;
+  transform: translateX(-50%);
+  width: 160px;
+  height: 0;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.splash-effect.active {
+  opacity: 1;
+}
+
+.splash-drop {
+  position: absolute;
+  bottom: 0;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #4db8ff;
+  opacity: 0;
+}
+
+.splash-effect.active .splash-drop {
+  animation: splashDrop 1s ease-out forwards;
+}
+
+.splash-drop:nth-child(1) { left: 5%;  animation-delay: 0s; }
+.splash-drop:nth-child(2) { left: 18%; animation-delay: 0.05s; }
+.splash-drop:nth-child(3) { left: 32%; animation-delay: 0.02s; }
+.splash-drop:nth-child(4) { left: 46%; animation-delay: 0.08s; }
+.splash-drop:nth-child(5) { left: 60%; animation-delay: 0.03s; }
+.splash-drop:nth-child(6) { left: 74%; animation-delay: 0.06s; }
+.splash-drop:nth-child(7) { left: 0%;  animation-delay: 0.1s; width: 10px; height: 10px; }
+.splash-drop:nth-child(8) { left: 88%; animation-delay: 0.07s; width: 10px; height: 10px; }
+
+@keyframes splashDrop {
+  0%   { transform: translateY(0) scale(1); opacity: 1; }
+  50%  { opacity: 1; }
+  100% { transform: translateY(-120px) scale(0.4); opacity: 0; }
+}
+
+/* Water ring ripple on splash */
+.splash-effect.active::before,
+.splash-effect.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%) scale(0);
+  width: 120px;
+  height: 20px;
+  border: 4px solid rgba(255,255,255,0.6);
+  border-radius: 50%;
+  animation: splashRipple 1.2s ease-out forwards;
+}
+.splash-effect.active::after {
+  width: 180px;
+  height: 28px;
+  animation-delay: 0.15s;
+  border-color: rgba(255,255,255,0.4);
+}
+
+@keyframes splashRipple {
+  0%   { transform: translateX(-50%) scale(0); opacity: 1; }
+  100% { transform: translateX(-50%) scale(2); opacity: 0; }
+}
+
+/* Water waves */
+.water {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 25%;
+  background: linear-gradient(180deg, rgba(30,144,255,0.7), #1565C0);
+  z-index: 1;
+}
+.water::before {
+  content: '';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  right: 0;
+  height: 16px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 16'%3E%3Cpath d='M0 8 Q25 0 50 8 T100 8 T150 8 T200 8 V16 H0Z' fill='%231E90FF'/%3E%3C/svg%3E") repeat-x;
+  background-size: 200px 16px;
+  animation: waves 3s linear infinite;
+}
+
+@keyframes waves {
+  0%   { background-position-x: 0; }
+  100% { background-position-x: 200px; }
+}
+
+/* Shark fin – swims behind the tower (z-index below tower's 2) */
+.shark-fin {
+  position: absolute;
+  bottom: 15%;
+  font-size: 1.6rem;
+  animation: sharkSwim 8s linear infinite;
+  z-index: 1;
+}
+@keyframes sharkSwim {
+  0%   { left: -10%; }
+  100% { left: 110%; }
+}
+
+/* Clouds */
+.cloud {
+  position: absolute;
+  top: 8%;
+  font-size: 2rem;
+  opacity: 0.7;
+  animation: cloudDrift 20s linear infinite;
+  z-index: 0;
+}
+.cloud:nth-child(2) { top: 15%; animation-duration: 28s; animation-delay: -10s; font-size: 1.5rem; }
+
+@keyframes cloudDrift {
+  0%   { left: 110%; }
+  100% { left: -15%; }
+}
+
+/* Sun */
+.sun {
+  position: absolute;
+  top: 5%;
+  right: 8%;
+  font-size: 2.2rem;
+  animation: sunPulse 3s ease-in-out infinite;
+  z-index: 0;
+}
+@keyframes sunPulse {
+  0%, 100% { transform: scale(1); }
+  50%      { transform: scale(1.15); }
+}
+
+/* ---------- Game Over ---------- */
+.game-over-score {
+  font-family: var(--font-title);
+  font-size: 3rem;
+  background: var(--bg-gradient);
+  background-size: 400% 400%;
+  animation: rainbowShift 4s ease infinite;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin: 0.5rem 0;
+}
+
+.results-grid {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.result-item {
+  border-radius: 15px;
+  padding: 0.8rem 1.2rem;
+  min-width: 90px;
+  color: #fff;
+  text-align: center;
+}
+.result-item .result-value {
+  font-family: var(--font-title);
+  font-size: 1.6rem;
+}
+.result-item .result-label {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
+/* ---------- Bouncing title animation ---------- */
+.bounce {
+  display: inline-block;
+  animation: bounce 2s ease infinite;
+}
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  30%      { transform: translateY(-12px); }
+  50%      { transform: translateY(0); }
+  70%      { transform: translateY(-6px); }
+}
+
+/* ---------- Confetti ---------- */
+.confetti-piece {
+  position: fixed;
+  width: 10px;
+  height: 20px;
+  top: -20px;
+  z-index: 999;
+  animation: confettiFall linear forwards;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 480px) {
+  html { font-size: 15px; }
+  .card { padding: 1.2rem 1rem; }
+  h1 { font-size: 1.8rem; }
+  .dunk-scene { height: 240px; }
+}
+
+/* Nav top bar */
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 1.5rem;
+  width: 100%;
+  max-width: 650px;
+  margin-bottom: 0.5rem;
+}
+.topbar-user {
+  font-family: var(--font-fun);
+  font-size: 1rem;
+  color: #555;
+}
+.topbar a {
+  color: var(--indigo);
+  text-decoration: none;
+  font-family: var(--font-body);
+  font-weight: 600;
+}
+.topbar a:hover { text-decoration: underline; }
+
+/* Splash effect for correct/wrong */
+.splash-correct { animation: splashGreen 0.5s ease; }
+.splash-wrong   { animation: splashRed 0.5s ease; }
+
+@keyframes splashGreen {
+  0%   { box-shadow: 0 0 0 0 rgba(50,205,50,0.6); }
+  100% { box-shadow: 0 0 0 30px rgba(50,205,50,0); }
+}
+@keyframes splashRed {
+  0%   { box-shadow: 0 0 0 0 rgba(255,68,68,0.6); }
+  100% { box-shadow: 0 0 0 30px rgba(255,68,68,0); }
+}
+
+/* ---------- Falling Character Icons ---------- */
+.falling-icons {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  overflow: hidden;
+  z-index: 0;
+}
+
+.falling-icon {
+  position: absolute;
+  top: -60px;
+  font-size: 2rem;
+  opacity: 0.18;
+  animation: iconFall linear infinite;
+}
+
+@keyframes iconFall {
+  0%   { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(calc(100vh + 80px)) rotate(360deg); }
+}
+
+.falling-icon:nth-child(1)  { left: 3%;  font-size: 1.6rem; animation-duration: 12s; animation-delay: 0s; }
+.falling-icon:nth-child(2)  { left: 10%; font-size: 2.2rem; animation-duration: 15s; animation-delay: -2s; }
+.falling-icon:nth-child(3)  { left: 18%; font-size: 1.4rem; animation-duration: 10s; animation-delay: -5s; }
+.falling-icon:nth-child(4)  { left: 25%; font-size: 2rem;   animation-duration: 18s; animation-delay: -3s; }
+.falling-icon:nth-child(5)  { left: 33%; font-size: 1.8rem; animation-duration: 14s; animation-delay: -8s; }
+.falling-icon:nth-child(6)  { left: 42%; font-size: 2.4rem; animation-duration: 16s; animation-delay: -1s; }
+.falling-icon:nth-child(7)  { left: 50%; font-size: 1.5rem; animation-duration: 11s; animation-delay: -6s; }
+.falling-icon:nth-child(8)  { left: 58%; font-size: 2rem;   animation-duration: 13s; animation-delay: -4s; }
+.falling-icon:nth-child(9)  { left: 66%; font-size: 1.7rem; animation-duration: 17s; animation-delay: -9s; }
+.falling-icon:nth-child(10) { left: 74%; font-size: 2.1rem; animation-duration: 12s; animation-delay: -7s; }
+.falling-icon:nth-child(11) { left: 82%; font-size: 1.9rem; animation-duration: 15s; animation-delay: -2s; }
+.falling-icon:nth-child(12) { left: 90%; font-size: 1.6rem; animation-duration: 14s; animation-delay: -10s; }
+
+.page-wrapper {
+  position: relative;
+  z-index: 1;
+}

@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% block title %}Login{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  <div class="card">
+    <h1 class="bounce">🧮 MathQuest</h1>
+    <p class="subtitle">The Ultimate Math Adventure!</p>
+
+    <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+      <label style="font-family: var(--font-fun); font-size: 1.1rem; color: #555;">
+        What's your name, adventurer?
+      </label>
+      <br><br>
+      <input type="text" name="player_name" placeholder="Enter your name ✏️"
+             required maxlength="20" autocomplete="off" autofocus>
+
+      <br><br>
+      <label style="font-family: var(--font-fun); font-size: 1.1rem; color: #555;">
+        Pick your character!
+      </label>
+      <div class="avatar-grid" id="avatarGrid">
+        <span class="avatar-option selected" data-avatar="🧑">🧑</span>
+        <span class="avatar-option" data-avatar="👧">👧</span>
+        <span class="avatar-option" data-avatar="👦">👦</span>
+        <span class="avatar-option" data-avatar="🦸">🦸</span>
+        <span class="avatar-option" data-avatar="🧙">🧙</span>
+        <span class="avatar-option" data-avatar="🐱">🐱</span>
+        <span class="avatar-option" data-avatar="🐶">🐶</span>
+        <span class="avatar-option" data-avatar="🦊">🦊</span>
+        <span class="avatar-option" data-avatar="🐼">🐼</span>
+        <span class="avatar-option" data-avatar="🦄">🦄</span>
+        <span class="avatar-option" data-avatar="🐲">🐲</span>
+        <span class="avatar-option" data-avatar="🤖">🤖</span>
+      </div>
+      <input type="hidden" name="avatar" id="avatarInput" value="🧑">
+
+      <br>
+      <button type="submit" class="btn btn-rainbow btn-lg">🚀 Start Adventure!</button>
+    </form>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  document.querySelectorAll('.avatar-option').forEach(el => {
+    el.addEventListener('click', () => {
+      document.querySelectorAll('.avatar-option').forEach(a => a.classList.remove('selected'));
+      el.classList.add('selected');
+      document.getElementById('avatarInput').value = el.dataset.avatar;
+    });
+  });
+</script>
+{% endblock %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MathQuest – {% block title %}Adventure{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧮</text></svg>">
+  {% block head %}{% endblock %}
+</head>
+<body>
+  <div class="falling-icons">
+    <span class="falling-icon">🧑</span>
+    <span class="falling-icon">👧</span>
+    <span class="falling-icon">👦</span>
+    <span class="falling-icon">🦸</span>
+    <span class="falling-icon">🧙</span>
+    <span class="falling-icon">🐱</span>
+    <span class="falling-icon">🐶</span>
+    <span class="falling-icon">🦊</span>
+    <span class="falling-icon">🐼</span>
+    <span class="falling-icon">🦄</span>
+    <span class="falling-icon">🐲</span>
+    <span class="falling-icon">🤖</span>
+  </div>
+  {% block body %}{% endblock %}
+  {% block scripts %}{% endblock %}
+</body>
+</html>

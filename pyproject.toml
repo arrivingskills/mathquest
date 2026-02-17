@@ -1,0 +1,19 @@
+[project]
+name = "mathquest"
+version = "0.1.0"
+description = "A colorful math adventure game for kids aged 7-12"
+readme = "README.md"
+authors = [
+    { name = "Andy Miles", email = "arrivingskillsai@outlook.com" }
+]
+requires-python = ">=3.10"
+dependencies = [
+    "flask>=3.0",
+]
+
+[project.scripts]
+mathquest = "mathquest:main"
+
+[build-system]
+requires = ["uv_build>=0.10.2,<0.11.0"]
+build-backend = "uv_build"

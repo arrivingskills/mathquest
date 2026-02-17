@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  <div class="topbar">
+    <span class="topbar-user">{{ avatar }} {{ player_name }}</span>
+    <a href="{{ url_for('logout') }}">🚪 Logout</a>
+  </div>
+
+  <div class="card">
+    <h1>Welcome back, {{ player_name }}! {{ avatar }}</h1>
+    <p class="subtitle">Ready for a math adventure?</p>
+
+    <div class="stats-row">
+      <div class="stat-box">
+        <div class="stat-value">{{ player.get('games_played', 0) }}</div>
+        <div class="stat-label">Games Played</div>
+      </div>
+      <div class="stat-box" style="background: linear-gradient(135deg, var(--green), #228B22);">
+        <div class="stat-value">{{ player.get('best_score', 0) }}</div>
+        <div class="stat-label">Best Score</div>
+      </div>
+      <div class="stat-box" style="background: linear-gradient(135deg, var(--orange), var(--red));">
+        <div class="stat-value">
+          {% if player.get('total_questions', 0) > 0 %}
+            {{ ((player.get('total_correct', 0) / player.get('total_questions', 1)) * 100) | round | int }}%
+          {% else %}
+            —
+          {% endif %}
+        </div>
+        <div class="stat-label">Accuracy</div>
+      </div>
+    </div>
+
+    <h3 class="rainbow">Choose your difficulty</h3>
+    <div class="difficulty-buttons">
+      <a href="{{ url_for('play', difficulty=1) }}" class="btn btn-green">🌱 Easy<br><small>Ages 7–8</small></a>
+      <a href="{{ url_for('play', difficulty=2) }}" class="btn btn-orange">🔥 Medium<br><small>Ages 9–10</small></a>
+      <a href="{{ url_for('play', difficulty=3) }}" class="btn btn-red">⚡ Hard<br><small>Ages 11–12</small></a>
+    </div>
+
+    <br>
+    <h2 class="rainbow">🏆 Top 5 Players</h2>
+    {% if leaderboard %}
+    <table class="leaderboard-table">
+      <thead>
+        <tr><th>#</th><th>Player</th><th>Score</th><th>Accuracy</th></tr>
+      </thead>
+      <tbody>
+        {% for entry in leaderboard %}
+        <tr class="rank-{{ loop.index }}">
+          <td>
+            {% if loop.index == 1 %}<span class="medal">🥇</span>
+            {% elif loop.index == 2 %}<span class="medal">🥈</span>
+            {% elif loop.index == 3 %}<span class="medal">🥉</span>
+            {% else %}{{ loop.index }}{% endif %}
+          </td>
+          <td>{{ entry.name }}</td>
+          <td style="font-family: var(--font-title);">{{ entry.score }}</td>
+          <td>{{ ((entry.correct / entry.total) * 100) | round | int }}%</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="subtitle">No scores yet – be the first! 🎯</p>
+    {% endif %}
+  </div>
+</div>
+{% endblock %}

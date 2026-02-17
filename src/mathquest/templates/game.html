@@ -1,0 +1,223 @@
+{% extends "base.html" %}
+{% block title %}Play!{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  <div class="topbar">
+    <span class="topbar-user">{{ avatar }} {{ player_name }}</span>
+    <a href="{{ url_for('dashboard') }}">🏠 Home</a>
+  </div>
+
+  <div class="card" id="gameCard">
+    <div class="game-header">
+      <span class="game-score" id="scoreDisplay">⭐ Score: 0</span>
+      <span class="game-wrong" id="wrongDisplay">❌ 0 / {{ max_wrong }}</span>
+    </div>
+
+    <!-- Dunk Tank Scene -->
+    <div class="dunk-scene" id="dunkScene">
+      <!-- Sky elements -->
+      <div class="sun">☀️</div>
+      <div class="cloud">☁️</div>
+      <div class="cloud">☁️</div>
+
+      <!-- Tower -->
+      <div class="dunk-tower"></div>
+
+      <!-- Pole extending from tower -->
+      <div class="dunk-pole"></div>
+
+      <!-- Rope from pole to chair -->
+      <div class="dunk-rope" id="dunkRope"></div>
+
+      <!-- Chair + Person assembly (moves together) -->
+      <div class="dunk-assembly" id="dunkAssembly">
+        <div class="dunk-person" id="dunkPerson">{{ avatar }}</div>
+        <div class="dunk-chair">🪑</div>
+      </div>
+
+      <!-- Water -->
+      <div class="water"></div>
+
+      <!-- Splash effect (hidden until triggered) -->
+      <div class="splash-effect" id="splashEffect">
+        <div class="splash-drop"></div>
+        <div class="splash-drop"></div>
+        <div class="splash-drop"></div>
+        <div class="splash-drop"></div>
+        <div class="splash-drop"></div>
+        <div class="splash-drop"></div>
+        <div class="splash-drop"></div>
+        <div class="splash-drop"></div>
+      </div>
+
+      <!-- Shark -->
+      <div class="shark-fin">🦈</div>
+    </div>
+
+    <!-- Question area -->
+    <div class="question-area" id="questionArea">
+      <div id="visualContent"></div>
+      <div class="question-text" id="questionText">Loading question...</div>
+    </div>
+
+    <div class="answer-row">
+      <input type="number" id="answerInput" class="answer-input"
+             placeholder="?" autocomplete="off" autofocus>
+      <button class="btn btn-green" id="submitBtn" onclick="submitAnswer()">
+        ✅ Check
+      </button>
+    </div>
+
+    <div class="feedback" id="feedback"></div>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+const MAX_WRONG = {{ max_wrong }};
+let currentScore = 0;
+let currentWrong = 0;
+let gameActive = true;
+let waitingForNext = false;
+
+// Dunk tank positioning
+function updatePlank(wrong) {
+  const assembly = document.getElementById('dunkAssembly');
+  const rope = document.getElementById('dunkRope');
+  const scene = document.getElementById('dunkScene');
+
+  const sceneH = scene.offsetHeight;
+
+  // Start position: just below the pole (14% + 8px pole height)
+  const startY = sceneH * 0.14 + 8;
+
+  // Water surface is at 75% of scene height
+  const waterY = sceneH * 0.75;
+
+  // Total drop distance from start to water
+  const totalDrop = waterY - startY - 50; // 50px so chair is above water at max-1
+
+  // Each wrong answer drops one equal unit
+  const dropPerWrong = totalDrop / MAX_WRONG;
+  const dropAmount = wrong * dropPerWrong;
+
+  // Position the assembly
+  const assemblyTop = startY + dropAmount;
+  assembly.style.top = assemblyTop + 'px';
+
+  // Extend the rope to connect pole to assembly
+  const ropeLength = assemblyTop - (sceneH * 0.14 + 8);
+  rope.style.height = Math.max(0, ropeLength) + 'px';
+}
+
+function loadQuestion() {
+  if (!gameActive) return;
+  fetch('/api/question')
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('visualContent').innerHTML = data.visual_html || '';
+      document.getElementById('questionText').textContent = data.question_text;
+      document.getElementById('answerInput').value = '';
+      document.getElementById('answerInput').focus();
+      document.getElementById('feedback').textContent = '';
+      document.getElementById('feedback').className = 'feedback';
+      waitingForNext = false;
+    });
+}
+
+function submitAnswer() {
+  if (!gameActive) return;
+  if (waitingForNext) {
+    loadQuestion();
+    return;
+  }
+
+  const input = document.getElementById('answerInput');
+  const answer = input.value.trim();
+  if (!answer) return;
+
+  fetch('/api/answer', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({answer: parseInt(answer)})
+  })
+  .then(r => r.json())
+  .then(data => {
+    const feedback = document.getElementById('feedback');
+    feedback.textContent = data.message;
+
+    const card = document.getElementById('gameCard');
+
+    if (data.correct) {
+      feedback.className = 'feedback correct';
+      card.classList.remove('splash-wrong');
+      card.classList.add('splash-correct');
+      spawnConfetti(5);
+    } else {
+      feedback.className = 'feedback wrong';
+      card.classList.remove('splash-correct');
+      card.classList.add('splash-wrong');
+    }
+    // Remove animation class after it plays
+    setTimeout(() => {
+      card.classList.remove('splash-correct', 'splash-wrong');
+    }, 500);
+
+    currentScore = data.score;
+    currentWrong = data.wrong;
+
+    document.getElementById('scoreDisplay').textContent = `⭐ Score: ${data.score}`;
+    document.getElementById('wrongDisplay').textContent = `❌ ${data.wrong} / ${MAX_WRONG}`;
+
+    updatePlank(data.wrong);
+
+    if (data.game_over) {
+      gameActive = false;
+      const assembly = document.getElementById('dunkAssembly');
+      assembly.classList.add('splashing');
+      // Trigger splash effect when character hits water
+      setTimeout(() => {
+        document.getElementById('splashEffect').classList.add('active');
+      }, 600);
+      feedback.textContent = '💦 SPLASH! Game Over!';
+      setTimeout(() => {
+        window.location.href = '/gameover';
+      }, 2500);
+    } else {
+      waitingForNext = true;
+      document.getElementById('submitBtn').textContent = '➡️ Next';
+    }
+  });
+}
+
+function spawnConfetti(count) {
+  const colors = ['#FF4444','#FF8C00','#FFD700','#32CD32','#1E90FF','#6A5ACD','#EE82EE'];
+  for (let i = 0; i < count; i++) {
+    const el = document.createElement('div');
+    el.className = 'confetti-piece';
+    el.style.left = (Math.random() * 100) + 'vw';
+    el.style.background = colors[Math.floor(Math.random() * colors.length)];
+    el.style.animationDuration = (2 + Math.random() * 2) + 's';
+    el.style.animationDelay = (Math.random() * 0.5) + 's';
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 5000);
+  }
+}
+
+// Handle Enter key
+document.getElementById('answerInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') submitAnswer();
+});
+
+// Initialize
+window.addEventListener('load', () => {
+  updatePlank(0);
+  loadQuestion();
+});
+
+// Re-position on resize
+window.addEventListener('resize', () => updatePlank(currentWrong));
+</script>
+{% endblock %}
