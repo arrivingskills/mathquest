@@ -259,13 +259,13 @@ def dashboard():
         return redirect(url_for("index"))
     data = _load_data()
     player = data["players"].get(session["player_name"], {})
-    top5 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:5]
+    top10 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:10]
     return render_template(
         "dashboard.html",
         player_name=session["player_name"],
         avatar=session.get("avatar", "🧑"),
         player=player,
-        leaderboard=top5,
+        leaderboard=top10,
     )
 
 
@@ -398,7 +398,7 @@ def gameover():
     wrong = session.get("wrong", 0)
     correct = total - wrong
     data = _load_data()
-    top5 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:5]
+    top10 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:10]
     return render_template(
         "gameover.html",
         player_name=session["player_name"],
@@ -407,7 +407,7 @@ def gameover():
         total=total,
         correct=correct,
         wrong=wrong,
-        leaderboard=top5,
+        leaderboard=top10,
     )
 
 
@@ -415,8 +415,8 @@ def gameover():
 def leaderboard():
     """Full leaderboard page."""
     data = _load_data()
-    top5 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:5]
-    return render_template("leaderboard.html", leaderboard=top5)
+    top10 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:10]
+    return render_template("leaderboard.html", leaderboard=top10)
 
 
 @app.route("/logout")
