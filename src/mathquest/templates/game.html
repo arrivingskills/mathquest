@@ -61,13 +61,15 @@
       <div class="question-text" id="questionText">Loading question...</div>
     </div>
 
-    <div class="answer-row">
+    <div class="answer-row" id="answerRow">
       <input type="number" id="answerInput" class="answer-input"
              placeholder="?" autocomplete="off" autofocus>
       <button class="btn btn-green" id="submitBtn" onclick="submitAnswer()">
         ✅ Check
       </button>
     </div>
+
+    <div class="mc-choices" id="mcChoices"></div>
 
     <div class="feedback" id="feedback"></div>
   </div>
@@ -120,11 +122,41 @@ function loadQuestion() {
       document.getElementById('visualContent').innerHTML = data.visual_html || '';
       document.getElementById('questionText').textContent = data.question_text;
       document.getElementById('answerInput').value = '';
-      document.getElementById('answerInput').focus();
       document.getElementById('feedback').textContent = '';
       document.getElementById('feedback').className = 'feedback';
+      document.getElementById('submitBtn').textContent = '✅ Check';
       waitingForNext = false;
+
+      const mcDiv = document.getElementById('mcChoices');
+      const answerRow = document.getElementById('answerRow');
+
+      if (data.type === 'multiple_choice' && data.choices && data.choices.length) {
+        answerRow.style.display = 'none';
+        mcDiv.innerHTML = '';
+        mcDiv.style.display = 'flex';
+        data.choices.forEach(choice => {
+          const btn = document.createElement('button');
+          btn.className = 'btn btn-blue mc-btn';
+          btn.textContent = choice;
+          btn.onclick = () => submitMCAnswer(choice);
+          mcDiv.appendChild(btn);
+        });
+      } else {
+        answerRow.style.display = '';
+        mcDiv.style.display = 'none';
+        mcDiv.innerHTML = '';
+        document.getElementById('answerInput').focus();
+      }
     });
+}
+
+function submitMCAnswer(choice) {
+  if (!gameActive || waitingForNext) {
+    if (waitingForNext) { loadQuestion(); }
+    return;
+  }
+  document.querySelectorAll('.mc-btn').forEach(b => b.disabled = true);
+  sendAnswer(choice);
 }
 
 function submitAnswer() {
@@ -133,15 +165,17 @@ function submitAnswer() {
     loadQuestion();
     return;
   }
-
   const input = document.getElementById('answerInput');
   const answer = input.value.trim();
   if (!answer) return;
+  sendAnswer(parseInt(answer));
+}
 
+function sendAnswer(value) {
   fetch('/api/answer', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify({answer: parseInt(answer)})
+    body: JSON.stringify({answer: value})
   })
   .then(r => r.json())
   .then(data => {
@@ -187,7 +221,18 @@ function submitAnswer() {
       }, 2500);
     } else {
       waitingForNext = true;
-      document.getElementById('submitBtn').textContent = '➡️ Next';
+      const mcDiv = document.getElementById('mcChoices');
+      if (mcDiv.style.display !== 'none' && mcDiv.children.length > 0) {
+        // MC mode: replace choices with a Next button
+        mcDiv.innerHTML = '';
+        const nextBtn = document.createElement('button');
+        nextBtn.className = 'btn btn-green';
+        nextBtn.textContent = '➡️ Next Question';
+        nextBtn.onclick = loadQuestion;
+        mcDiv.appendChild(nextBtn);
+      } else {
+        document.getElementById('submitBtn').textContent = '➡️ Next';
+      }
     }
   });
 }

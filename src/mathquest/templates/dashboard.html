@@ -33,11 +33,12 @@
       </div>
     </div>
 
-    <h3 class="rainbow">Choose your difficulty</h3>
+    <h3 class="rainbow">Choose your age group</h3>
     <div class="difficulty-buttons">
-      <a href="{{ url_for('play', difficulty=1) }}" class="btn btn-green">🌱 Easy<br><small>Ages 7–8</small></a>
-      <a href="{{ url_for('play', difficulty=2) }}" class="btn btn-orange">🔥 Medium<br><small>Ages 9–10</small></a>
-      <a href="{{ url_for('play', difficulty=3) }}" class="btn btn-red">⚡ Hard<br><small>Ages 11–12</small></a>
+      <a href="{{ url_for('choose_difficulty', age_group=1) }}" class="btn btn-green">Ages 6–8</a>
+      <a href="{{ url_for('choose_difficulty', age_group=2) }}" class="btn btn-orange">Ages 9–10</a>
+      <a href="{{ url_for('choose_difficulty', age_group=3) }}" class="btn btn-red">Ages 11–12</a>
+      <a href="{{ url_for('choose_difficulty', age_group=4) }}" class="btn btn-indigo">Ages 13–14</a>
     </div>
 
     <br>

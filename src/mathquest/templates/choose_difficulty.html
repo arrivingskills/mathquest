@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Choose Difficulty{% endblock %}
+
+{% block body %}
+<div class="page-wrapper">
+  <div class="topbar">
+    <span class="topbar-user">{{ avatar }} {{ player_name }}</span>
+    <a href="{{ url_for('dashboard') }}">← Back</a>
+  </div>
+
+  <div class="card">
+    <h1>Ages {{ age_label }} 🎯</h1>
+    <p class="subtitle">How challenging do you want it?</p>
+
+    <div class="difficulty-buttons difficulty-buttons--col">
+      <a href="{{ url_for('play', age_group=age_group, sub_difficulty=1) }}"
+         class="btn btn-green btn-lg">
+        🌱 Easy
+      </a>
+      <a href="{{ url_for('play', age_group=age_group, sub_difficulty=2) }}"
+         class="btn btn-orange btn-lg">
+        🔥 Medium
+      </a>
+      <a href="{{ url_for('play', age_group=age_group, sub_difficulty=3) }}"
+         class="btn btn-red btn-lg">
+        ⚡ Hard
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}
