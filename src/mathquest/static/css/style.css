@@ -1,5 +1,5 @@
 /* ============================================================
-   MathQuest – Rainbow-themed CSS for kids aged 7–12
+   MathQuest – Rainbow-themed CSS for kids aged 6–14
    ============================================================ */
 
 /* Google Fonts import (kid-friendly) */
@@ -213,6 +213,33 @@ input:focus {
   justify-content: center;
   margin: 1.2rem 0;
   flex-wrap: wrap;
+}
+
+.difficulty-buttons--col {
+  flex-direction: column;
+  align-items: center;
+}
+.difficulty-buttons--col .btn {
+  width: 220px;
+}
+
+/* ---------- Multiple-choice button grid ---------- */
+.mc-choices {
+  display: none;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  justify-content: center;
+  margin: 1rem 0;
+}
+.mc-btn {
+  min-width: 90px;
+  font-size: 1.2rem;
+  padding: 0.7rem 1.4rem;
+}
+.mc-btn:disabled {
+  opacity: 0.5;
+  cursor: default;
+  transform: none;
 }
 
 /* ---------- Leaderboard ---------- */
