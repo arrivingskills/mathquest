@@ -60,7 +60,7 @@
 
     <br>
     <div style="display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;">
-      <a href="{{ url_for('play', difficulty=1) }}" class="btn btn-green btn-lg">🔄 Play Again</a>
+      <a href="{{ url_for('play', age_group=age_group, sub_difficulty=sub_difficulty) }}" class="btn btn-green btn-lg">🔄 Play Again</a>
       <a href="{{ url_for('dashboard') }}" class="btn btn-blue btn-lg">🏠 Dashboard</a>
     </div>
   </div>
