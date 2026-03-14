@@ -163,8 +163,16 @@ dependencies = [
     { name = "flask" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "mathquest" },
+]
+
 [package.metadata]
 requires-dist = [{ name = "flask", specifier = ">=3.0" }]
+
+[package.metadata.requires-dev]
+dev = [{ name = "mathquest", editable = "." }]
 
 [[package]]
 name = "werkzeug"

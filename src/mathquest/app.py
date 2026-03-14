@@ -75,18 +75,18 @@ VISUAL_OBJECTS = [
 # Tuple layout: (num_min, num_max, mult_max, div_b_max, div_q_max)
 # ---------------------------------------------------------------------------
 _RANGES: dict[tuple[int, int], tuple[int, int, int, int, int]] = {
-    (1, 1): (1,   5,    3,   2,  3),   # 6-8  easy
-    (1, 2): (1,  10,    5,   3,  5),   # 6-8  medium
-    (1, 3): (2,  15,    6,   5,  6),   # 6-8  hard
-    (2, 1): (5,  20,    8,   5,  8),   # 9-10 easy
-    (2, 2): (10, 50,   10,   8, 10),   # 9-10 medium
-    (2, 3): (20, 100,  12,  10, 12),   # 9-10 hard
-    (3, 1): (20, 100,  12,  10, 15),   # 11-12 easy
-    (3, 2): (50, 200,  15,  12, 15),   # 11-12 medium
-    (3, 3): (100, 500, 20,  15, 20),   # 11-12 hard
-    (4, 1): (100, 500,  20, 15, 20),   # 13-14 easy
-    (4, 2): (200, 1000, 25, 20, 25),   # 13-14 medium
-    (4, 3): (500, 2000, 50, 25, 50),   # 13-14 hard
+    (1, 1): (1, 5, 3, 2, 3),  # 6-8  easy
+    (1, 2): (1, 10, 5, 3, 5),  # 6-8  medium
+    (1, 3): (2, 15, 6, 5, 6),  # 6-8  hard
+    (2, 1): (5, 20, 8, 5, 8),  # 9-10 easy
+    (2, 2): (10, 50, 10, 8, 10),  # 9-10 medium
+    (2, 3): (20, 100, 12, 10, 12),  # 9-10 hard
+    (3, 1): (20, 100, 12, 10, 15),  # 11-12 easy
+    (3, 2): (50, 200, 15, 12, 15),  # 11-12 medium
+    (3, 3): (100, 500, 20, 15, 20),  # 11-12 hard
+    (4, 1): (100, 500, 20, 15, 20),  # 13-14 easy
+    (4, 2): (200, 1000, 25, 20, 25),  # 13-14 medium
+    (4, 3): (500, 2000, 50, 25, 50),  # 13-14 hard
 }
 
 
@@ -96,7 +96,9 @@ def _generate_question(age_group: int = 1, sub_difficulty: int = 1) -> dict:
     age_group:      1=ages 6-8, 2=9-10, 3=11-12, 4=13-14
     sub_difficulty: 1=easy, 2=medium, 3=hard
     """
-    num_min, num_max, mult_max, div_b_max, div_q_max = _RANGES[(age_group, sub_difficulty)]
+    num_min, num_max, mult_max, div_b_max, div_q_max = _RANGES[
+        (age_group, sub_difficulty)
+    ]
 
     is_visual = random.random() < 0.4
     op = random.choice(["+", "-", "*", "/"])
@@ -412,7 +414,9 @@ def dashboard():
         return redirect(url_for("index"))
     data = _load_data()
     player = data["players"].get(session["player_name"], {})
-    top10 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:10]
+    top10 = sorted(
+        data["leaderboard"], key=lambda x: x["score"], reverse=True
+    )[:10]
     return render_template(
         "dashboard.html",
         player_name=session["player_name"],
@@ -505,14 +509,16 @@ def api_answer():
         sub_difficulty = session.get("sub_difficulty", 1)
         points = ((age_group - 1) * 3 + sub_difficulty) * 5
         score += points
-        message = random.choice([
-            f"🎉 Awesome! +{points} points!",
-            f"⭐ Brilliant! +{points} points!",
-            f"🌟 Super! +{points} points!",
-            f"🏆 Amazing! +{points} points!",
-            f"✨ Fantastic! +{points} points!",
-            f"🎯 Perfect! +{points} points!",
-        ])
+        message = random.choice(
+            [
+                f"🎉 Awesome! +{points} points!",
+                f"⭐ Brilliant! +{points} points!",
+                f"🌟 Super! +{points} points!",
+                f"🏆 Amazing! +{points} points!",
+                f"✨ Fantastic! +{points} points!",
+                f"🎯 Perfect! +{points} points!",
+            ]
+        )
     else:
         wrong += 1
         message = f"😕 Oops! The answer was {correct_answer}."
@@ -525,7 +531,9 @@ def api_answer():
 
     if game_over:
         # Save score to leaderboard
-        _save_game_result(session["player_name"], score, total, total - wrong)
+        player_name = session.get("player_name")
+        if player_name:
+            _save_game_result(player_name, score, total, total - wrong)
 
     return jsonify(
         {
@@ -574,7 +582,9 @@ def gameover():
     wrong = session.get("wrong", 0)
     correct = total - wrong
     data = _load_data()
-    top10 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:10]
+    top10 = sorted(
+        data["leaderboard"], key=lambda x: x["score"], reverse=True
+    )[:10]
     return render_template(
         "gameover.html",
         player_name=session["player_name"],
@@ -584,6 +594,8 @@ def gameover():
         correct=correct,
         wrong=wrong,
         leaderboard=top10,
+        age_group=session.get("age_group", 1),
+        sub_difficulty=session.get("sub_difficulty", 1),
     )
 
 
@@ -591,7 +603,9 @@ def gameover():
 def leaderboard():
     """Full leaderboard page."""
     data = _load_data()
-    top10 = sorted(data["leaderboard"], key=lambda x: x["score"], reverse=True)[:10]
+    top10 = sorted(
+        data["leaderboard"], key=lambda x: x["score"], reverse=True
+    )[:10]
     return render_template("leaderboard.html", leaderboard=top10)
 
 

@@ -117,7 +117,10 @@ function updatePlank(wrong) {
 function loadQuestion() {
   if (!gameActive) return;
   fetch('/api/question')
-    .then(r => r.json())
+    .then(r => {
+      if (!r.ok) throw new Error('Server error: ' + r.status);
+      return r.json();
+    })
     .then(data => {
       document.getElementById('visualContent').innerHTML = data.visual_html || '';
       document.getElementById('questionText').textContent = data.question_text;
@@ -147,6 +150,9 @@ function loadQuestion() {
         mcDiv.innerHTML = '';
         document.getElementById('answerInput').focus();
       }
+    })
+    .catch(() => {
+      document.getElementById('questionText').textContent = 'Oops! Could not load question. Try refreshing the page.';
     });
 }
 
@@ -167,8 +173,8 @@ function submitAnswer() {
   }
   const input = document.getElementById('answerInput');
   const answer = input.value.trim();
-  if (!answer) return;
-  sendAnswer(parseInt(answer));
+  if (answer === '') return;
+  sendAnswer(parseInt(answer, 10));
 }
 
 function sendAnswer(value) {
@@ -177,7 +183,10 @@ function sendAnswer(value) {
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({answer: value})
   })
-  .then(r => r.json())
+  .then(r => {
+    if (!r.ok) throw new Error('Server error: ' + r.status);
+    return r.json();
+  })
   .then(data => {
     const feedback = document.getElementById('feedback');
     feedback.textContent = data.message;
@@ -221,6 +230,7 @@ function sendAnswer(value) {
       }, 2500);
     } else {
       waitingForNext = true;
+
       const mcDiv = document.getElementById('mcChoices');
       if (mcDiv.style.display !== 'none' && mcDiv.children.length > 0) {
         // MC mode: replace choices with a Next button
@@ -234,6 +244,13 @@ function sendAnswer(value) {
         document.getElementById('submitBtn').textContent = '➡️ Next';
       }
     }
+  })
+  .catch(() => {
+    const feedback = document.getElementById('feedback');
+    feedback.className = 'feedback wrong';
+    feedback.textContent = '⚠️ Something went wrong — please try refreshing.';
+    // Re-enable MC buttons so the user isn't stuck
+    document.querySelectorAll('.mc-btn').forEach(b => b.disabled = false);
   });
 }
 
