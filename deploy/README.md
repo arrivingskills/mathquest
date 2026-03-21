@@ -88,6 +88,7 @@ The script will automatically:
 | HTTP 401 on deploy | Check your API token is correct |
 | App loads but shows an error | In PythonAnywhere, check **Web → Error log** |
 | Changes not showing | Make sure you ran `update.sh` AND reloaded |
+| Python version rejected | Re-run with `--python 3.13` (or another version supported by your account/region) |
 
 ---
 
