@@ -12,6 +12,7 @@ set -e  # stop on any error
 REPO="https://github.com/arrivingskills/mathquest.git"
 APP_DIR="$HOME/mathquest"
 VENV_DIR="$APP_DIR/venv"
+PYTHON_VERSION="python3.12"
 
 echo ""
 echo "=== MathQuest — PythonAnywhere setup ==="
@@ -30,8 +31,8 @@ fi
 if [ -d "$VENV_DIR" ]; then
     echo "[2/3] Virtualenv already exists — skipping creation."
 else
-    echo "[2/3] Creating virtualenv..."
-    python3 -m venv "$VENV_DIR"
+    echo "[2/3] Creating virtualenv with $PYTHON_VERSION..."
+    $PYTHON_VERSION -m venv "$VENV_DIR"
 fi
 
 # ── 3. Install / upgrade dependencies ────────────────────────────────────────

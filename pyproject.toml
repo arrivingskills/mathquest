@@ -6,9 +6,10 @@ readme = "README.md"
 authors = [
     { name = "Andy Miles", email = "arrivingskillsai@outlook.com" }
 ]
-requires-python = ">=3.10"
+requires-python = "==3.13.*"
 dependencies = [
     "flask>=3.0",
+    "requests>=2.32.5",
 ]
 
 [project.scripts]
